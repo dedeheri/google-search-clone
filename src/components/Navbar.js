@@ -8,7 +8,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { banner, google, mic } from "../assets";
+import { banner, mic } from "../assets";
 import Popover from "./Popover";
 
 function Navbar() {

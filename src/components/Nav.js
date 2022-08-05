@@ -71,22 +71,6 @@ function Nav() {
             )
           }
         </NavLink>
-
-        <NavLink to={"/news" + location.search}>
-          {({ isActive }) =>
-            isActive ? (
-              <div className="flex items-center space-x-2 border-b-[0.2rem] border-[#8ab4f8] pb-2">
-                <img src={newsColor} alt={newsColor} className="h-4" />
-                <h1 className="text-sm pb-1 text-[#8ab4f8]">News</h1>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2 border-b-[0.2rem] border-transparent pb-2">
-                <img src={newsGray} alt={newsGray} className="h-4" />
-                <h1 className="text-sm pb-1 text-[#969BA1]">News</h1>
-              </div>
-            )
-          }
-        </NavLink>
       </div>
 
       <div className="border-b border-[#3e3f41]" />
