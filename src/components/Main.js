@@ -5,6 +5,11 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Container from "./Container";
 import ReactPlayer from "react-player";
+
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
+import LoadingImage from "./LoadingImage";
+
 function Main() {
   // result
   const [resultSearch, setResultSearch] = useState("");
@@ -15,11 +20,6 @@ function Main() {
   const [knowledgePanel, setKnowledgePanel] = useState("");
   const [knowledgePanelLoading, setKnowledgePanelLoading] = useState(true);
   const [knowledgePanelError, setKnowledgePanelError] = useState("");
-
-  // news
-  const [newsResultSearch, setNewsResultSearch] = useState("");
-  const [newsResultSearchLoading, setNewsResultSearchLoading] = useState("");
-  const [newsResultSearchError, setNewsResultSearchError] = useState("");
 
   // video
   const [videoResultSearch, setVideoResultSearch] = useState("");
@@ -64,20 +64,8 @@ function Main() {
         setResultSearchLoading(false);
         setResultSearch(data);
       } catch (error) {
-        console.log(error);
+        setResultSearchLoading(false);
         setResultSearchError(error);
-      }
-    }
-
-    // news
-    async function getNewsResult() {
-      try {
-        const url = `https://google-search3.p.rapidapi.com/api/v1/news/${params}`;
-        const { data } = await axios.get(url, option.result);
-        setNewsResultSearchLoading(false);
-        setNewsResultSearch(data);
-      } catch (error) {
-        setVideoResultSearchError(error);
       }
     }
 
@@ -89,7 +77,8 @@ function Main() {
         setVideoResultSearchLoading(false);
         setVideoResultSearch(data);
       } catch (error) {
-        setKnowledgePanelError(error);
+        setVideoResultSearchLoading(false);
+        setVideoResultSearchError(error);
       }
     }
 
@@ -101,6 +90,7 @@ function Main() {
         setImageResultSearchLoading(false);
         setImageResultSearch(data);
       } catch (error) {
+        setImageResultSearchLoading(false);
         setImageResultSearchError(error);
       }
     }
@@ -113,12 +103,12 @@ function Main() {
         setKnowledgePanel(data);
         setKnowledgePanelLoading(false);
       } catch (error) {
-        setNewsResultSearchError(error);
+        setKnowledgePanelLoading(false);
+        setKnowledgePanelError(error);
       }
     }
 
     getKnowladgePanel();
-    getNewsResult();
     getResultSearch();
     getVideoResult();
     getImageResult();
@@ -127,8 +117,6 @@ function Main() {
   function transcute(props) {
     return props?.length > 180 ? props.substring(0, 180) + "..." : props;
   }
-
-  console.log(imageResultSearch);
   switch (location.pathname) {
     case "/search":
       return (
@@ -138,6 +126,10 @@ function Main() {
 
             {resultSearchLoading ? (
               <LoadingResult />
+            ) : resultSearchError ? (
+              <div className="border border-red-500 bg-red-900 p-5 rounded-md mt-5">
+                <h1 className="text-red-200 text-2xl">Terjadi kesalahan</h1>
+              </div>
             ) : (
               <div className="space-y-7 w-full lg:w-[40rem] col-span-2">
                 {/* time */}
@@ -164,6 +156,10 @@ function Main() {
             {/* grid 2 */}
             {knowledgePanelLoading ? (
               <LoadingKnowladge />
+            ) : knowledgePanelError ? (
+              <div className="border border-red-500 bg-red-900 p-5 rounded-md mt-5">
+                <h1 className="text-red-200 text-2xl">Terjadi kesalahan</h1>
+              </div>
             ) : (
               <div className="w-full lg:w-[23rem]">
                 <div className="border border-[#3e3f41] rounded-2xl w-full">
@@ -227,27 +223,59 @@ function Main() {
     case "/video":
       return (
         <Container>
-          <div className="mt-5 space-y-10 w-full lg:w-[40rem] ">
-            {videoResultSearch?.results?.map((p, i) => (
-              <div className="space-y-3" key={i}>
-                <h1 className="text-[#bdc1c6]">{p?.cite?.domain}</h1>
-                <a href={p.link}>
-                  <h1 className="text-lg font-medium text-[#8ab4f8] hover:underline">
-                    {p?.title}
-                  </h1>
-                </a>
-                <div className="grid grid-cols-1 lg:grid-cols-3">
-                  <ReactPlayer url={p.link} width={"12rem"} height="6rem" />
-                  <div className="col-span-2">
-                    <h1>{p.description}</h1>
+          {videoResultSearchLoading ? (
+            <LoadingImage />
+          ) : videoResultSearchError ? (
+            <div className="border border-red-500 bg-red-900 p-5 rounded-md mt-5">
+              <h1 className="text-red-200 text-2xl">Terjadi kesalahan</h1>
+            </div>
+          ) : (
+            <div className="mt-5 space-y-10 w-full lg:w-[40rem] ">
+              {videoResultSearch?.results?.map((p, i) => (
+                <div className="space-y-3" key={i}>
+                  <h1 className="text-[#bdc1c6]">{p?.cite?.domain}</h1>
+                  <a href={p.link}>
+                    <h1 className="text-lg font-medium text-[#8ab4f8] hover:underline">
+                      {p?.title}
+                    </h1>
+                  </a>
+                  <div className="grid grid-cols-1 lg:grid-cols-3">
+                    <ReactPlayer url={p.link} width={"12rem"} height="6rem" />
+                    <div className="col-span-2">
+                      <h1>{p.description}</h1>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </Container>
       );
 
+    case "/image":
+      return (
+        <Container>
+          {imageResultSearchLoading ? (
+            <LoadingImage />
+          ) : imageResultSearchError ? (
+            <div className="border border-red-500 bg-red-900 p-5 rounded-md mt-5">
+              <h1 className="text-red-200 text-2xl">Terjadi kesalahan</h1>
+            </div>
+          ) : (
+            <div className="mt-5 w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-9 space-x-3  ">
+              {imageResultSearch?.image_results?.map((image, index) => (
+                <Zoom key={index}>
+                  <img
+                    src={image?.image?.src}
+                    alt={image?.image?.src}
+                    className="w-full"
+                  />
+                </Zoom>
+              ))}
+            </div>
+          )}
+        </Container>
+      );
     default:
       return <h1>error</h1>;
   }

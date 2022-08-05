@@ -23,7 +23,7 @@ function Nav() {
 
   return (
     <>
-      <div className="flex items-center space-x-5 max-w-[42rem] px-4 lg:mx-[10.25rem]">
+      <div className="flex items-center space-x-5 max-w-[42rem] px-4 lg:mx-[14.25rem]">
         <NavLink to={"/search" + location.search}>
           {({ isActive }) =>
             isActive ? (

@@ -1,4 +1,4 @@
-import banner from "./banner.png";
+import banner from "./gatoklogo.png";
 import drive from "./drive.png";
 import gmail from "./gmail.png";
 import google from "./google.png";

@@ -53,12 +53,8 @@ function Navbar() {
         {/* logo */}
         <div className="space-x-3 md:space-x-6 lg:space-x-10 w-full flex items-center">
           <Link to="/">
-            <img
-              src={banner}
-              alt={banner}
-              className="w-[5.5rem] hidden md:block"
-            />
-            <img src={google} alt={google} className="w-7 block md:hidden" />
+            <img src={banner} alt={banner} className="w-[10rem] md:w-[11rem]" />
+            {/* <img src={google} alt={google} className="w-7 block md:hidden" /> */}
           </Link>
 
           {/* input */}
